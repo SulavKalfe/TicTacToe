@@ -84,8 +84,8 @@ def game():
             print("Invalid move")
 
 
-
-game()
+if __name__ == "__main__":
+    game()
 
 
 # print(player1_moves)
