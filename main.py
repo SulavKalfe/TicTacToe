@@ -9,14 +9,35 @@ class Hangman:
         self.player1_move = list()
         self.player2_move = list()
         self.root = tk.Tk()
+        self.root.resizable(False, False)
         self.root.title("Tic Tac Toe")
         self.canvas = tk.Canvas(self.root, width=300, height=300)
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.canvas.bind("<Button-1>", self.find_section)
         # self.canvas.bind("<Configure>", self.draw_grid)
 
+        self.root.after(100, self.draw_border)
+
     def game(self):
+        # print("are these working?")
+
         self.root.mainloop()
+
+    def draw_border(self):
+        # these are for vertical lines
+        start_x_for_first, start_y_for_first, end_x_for_first, end_y_for_first = self.find_top_right_coords(0, 0)
+        start_x_for_second, start_y_for_second, end_x_for_second, end_y_for_second = self.find_top_right_coords(0, 1)
+
+        # these are the horizontal lines
+        start_x_first, start_y_first, end_x_first, end_y_first = self.find_bottom_left_coords(0, 0)
+        start_x_second, start_y_second, end_x_second, end_y_second = self.find_bottom_left_coords(1, 0)
+
+        self.canvas.create_line(start_x_for_first, start_y_for_first, end_x_for_first, end_y_for_first, width=2, fill="black")
+        self.canvas.create_line(start_x_for_second, start_y_for_second, end_x_for_second, end_y_for_second, width=2, fill="black")
+        #
+        self.canvas.create_line(start_x_first, start_y_first, end_x_first, end_y_first, width=2, fill="black")
+        self.canvas.create_line(start_x_second, start_y_second, end_x_second, end_y_second, width=2, fill="black")
+
 
     def find_section(self, event):
         self.moves_done+=1
@@ -129,20 +150,53 @@ class Hangman:
         end_section_x, end_section_y = self.find_coords(end_section[0], end_section[1])
         self.canvas.create_line(start_section_x, start_section_y, end_section_x, end_section_y, fill="black", width=2)
 
-
-    def find_coords(self, row, column):
-        canvas_width = self.canvas.winfo_width()
-        canvas_height = self.canvas.winfo_height()
+    def section_width_and_height(self):
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
         # print(canvas_width, canvas_height)
 
-        section_width = canvas_width // 3
-        section_height = canvas_height // 3
+        section_width = width // 3
+        section_height = height // 3
         # print(section_width, section_height)
+        return section_width, section_height
+
+    def find_coords(self, row, column):
+        section_width, section_height = self.section_width_and_height()
 
         centre_x = (column * section_width) + (section_width / 2)
         centre_y = (row * section_height) + (section_height / 2)
 
         return centre_x, centre_y
+
+    def find_top_right_coords(self, row, column):
+        section_width, section_height = self.section_width_and_height()
+
+        top_right_x = (column * section_width) + section_width
+        top_right_y = row * section_height
+
+        bottom_right_x = top_right_x
+        bottom_right_y = top_right_y + (3*section_height)
+        # print(bottom_right_x, bottom_right_y)
+
+        return top_right_x, top_right_y, bottom_right_x, bottom_right_y
+
+
+    def find_bottom_left_coords(self, row, column):
+        # print("are these working?")
+        section_width, section_height = self.section_width_and_height()
+
+        bottom_left_x = column * section_width
+        bottom_left_y = (row * section_height) + section_height
+
+        bottom_right_x = bottom_left_x + (3*section_width)
+        bottom_right_y = bottom_left_y
+
+        # print(bottom_right_y)
+
+        return bottom_left_x, bottom_left_y, bottom_right_x, bottom_right_y
+
+
+
 
 
 game1 = Hangman()
