@@ -89,9 +89,12 @@ class Hangman:
             # print(i)
             if i == sortedlist:
                 self.draw_winning_line(sortedlist)
-                messagebox.showinfo("Congratulations", f"Player {player} has won the game!")
-                self.canvas.unbind('<Button-1>')
-                self.root.destroy()
+                won = messagebox.askyesno("Congratulations", f"Player {player} has won the game! {"\n"} Want to play again?")
+                if won:
+                    self.restart_game()
+                else:
+                    self.canvas.unbind('<Button-1>')
+                    self.root.destroy()
 
             else:
                 winning_move = list()
@@ -102,9 +105,12 @@ class Hangman:
         chances = 9
         # print(f"moves: {move_done}")
         if chances < move_done:
-            messagebox.showinfo("Draw", "The game is draw")
-            self.canvas.unbind('<Button-1>')
-            self.root.destroy()
+            draw = messagebox.askyesno("Draw", "The game is draw '\n' Want to play again?")
+            if draw:
+                self.restart_game()
+            else:
+                self.canvas.unbind('<Button-1>')
+                self.root.destroy()
 
     def get_position(self, event):
         width = self.canvas.winfo_width()
@@ -123,12 +129,12 @@ class Hangman:
 
     def draw_circle(self, position):
         centre_for_x, centre_for_y = position
-        self.canvas.create_oval(centre_for_x - 25, centre_for_y - 25, centre_for_x + 25, centre_for_y + 25, outline="black", width=2)
+        self.canvas.create_oval(centre_for_x - 25, centre_for_y - 25, centre_for_x + 25, centre_for_y + 25, outline="black", width=2, tags="circle")
 
     def draw_cross(self, position):
         centre_for_x, centre_for_y = position
-        self.canvas.create_line(centre_for_x - 20, centre_for_y - 20, centre_for_x + 20, centre_for_y + 20, fill="black", width=2)
-        self.canvas.create_line(centre_for_x + 20, centre_for_y - 20, centre_for_x - 20, centre_for_y + 20, fill="black", width=2)
+        self.canvas.create_line(centre_for_x - 20, centre_for_y - 20, centre_for_x + 20, centre_for_y + 20, fill="black", width=2, tags="cross")
+        self.canvas.create_line(centre_for_x + 20, centre_for_y - 20, centre_for_x - 20, centre_for_y + 20, fill="black", width=2, tags="cross")
 
     def draw_winning_line(self, winning_list):
         # print(winning_list)
@@ -148,7 +154,7 @@ class Hangman:
         # print(start_section, end_section)
         start_section_x, start_section_y = self.find_coords(start_section[0], start_section[1])
         end_section_x, end_section_y = self.find_coords(end_section[0], end_section[1])
-        self.canvas.create_line(start_section_x, start_section_y, end_section_x, end_section_y, fill="black", width=2)
+        self.canvas.create_line(start_section_x, start_section_y, end_section_x, end_section_y, fill="black", width=2, tags="winningline")
 
     def section_width_and_height(self):
         width = self.canvas.winfo_width()
@@ -194,6 +200,15 @@ class Hangman:
         # print(bottom_right_y)
 
         return bottom_left_x, bottom_left_y, bottom_right_x, bottom_right_y
+
+    def restart_game(self):
+        self.canvas.delete("cross")
+        self.canvas.delete("circle")
+        self.canvas.delete("winningline")
+        self.moves_done = 1
+        self.player1_move = list()
+        self.player2_move = list()
+
 
 
 
