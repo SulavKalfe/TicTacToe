@@ -14,7 +14,6 @@ class Hangman:
         self.canvas = tk.Canvas(self.root, width=300, height=300)
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.canvas.bind("<Button-1>", self.find_section)
-        # self.canvas.bind("<Configure>", self.draw_grid)
 
         self.root.after(100, self.draw_border)
 
@@ -89,7 +88,7 @@ class Hangman:
             # print(sortedlist)
             # print(i)
             if i == sortedlist:
-                self.draw_winning_line(winning_move)
+                self.draw_winning_line(sortedlist)
                 messagebox.showinfo("Congratulations", f"Player {player} has won the game!")
                 self.canvas.unbind('<Button-1>')
                 self.root.destroy()
@@ -132,6 +131,7 @@ class Hangman:
         self.canvas.create_line(centre_for_x + 20, centre_for_y - 20, centre_for_x - 20, centre_for_y + 20, fill="black", width=2)
 
     def draw_winning_line(self, winning_list):
+        # print(winning_list)
         section_row_column = {
             '1': [0, 0],
             '2': [0, 1],
