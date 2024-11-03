@@ -64,6 +64,10 @@ def game():
                 # print("Valid move from player 1")
                 have_won = check_win_for_player(player1_moves, "1")
                 if have_won is not None:
+                    for i in to_replace3:
+                        print(" ".join(i))
+                        if to_replace3.index(i) != 2:
+                            print("-----------")
                     print(have_won)
                     break
             else:
@@ -77,11 +81,21 @@ def game():
                         pass
                 have_won = check_win_for_player(player2_moves, "2")
                 if have_won is not None:
+                    for i in to_replace3:
+                        print(" ".join(i))
+                        if to_replace3.index(i) != 2:
+                            print("-----------")
                     print(have_won)
                     break
             moves_done += 1
         else:
             print("Invalid move")
+    else:
+        for i in to_replace3:
+            print(" ".join(i))
+            if to_replace3.index(i) != 2:
+                print("-----------")
+        print("It's draw")
 
 
 if __name__ == "__main__":
